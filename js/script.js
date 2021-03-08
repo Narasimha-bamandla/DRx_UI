@@ -1,3 +1,6 @@
+if(navigator.userAgent.match(/Trident\/7\./)) {  
+	$('link[href="css/h2h_chatbot.css"]').attr('href','css/h2h_chatbot_ie.css');
+} 
 function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
