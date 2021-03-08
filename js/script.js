@@ -356,8 +356,7 @@ function setUserResponse(message) {
 
     $(".usrInput").val("");
     $(UserResponse).appendTo(".chats").hide().fadeIn().before('<div class="clr"></div>');
-    scrollToBottomOfResults();
-    showBotTyping();
+    scrollToBottomOfResults(); 
     $(".suggestions").remove();
 }
 
@@ -373,6 +372,7 @@ function scrollToBottomOfResults() {
 
 //============== send the user message to rasa server =============================================
 function send(message) {
+	showBotTyping();
     $.ajax({
         url: API.webhook,
         type: "POST",
@@ -410,6 +410,7 @@ function send(message) {
 
 /* Loads the chatbot as per Vendor - Start */
 function initChatbot(message) {
+	showBotTyping();
     $.ajax({
         url: API.webhook,
         type: "POST",
@@ -842,8 +843,7 @@ function getUserPosition(position) {
     //here you add the intent which you want to trigger 
     response = '/inform{"latitude":' + position.coords.latitude + ',"longitude":' + position.coords.longitude + '}';
     $("#userInput").prop('disabled', false);
-    send(response);
-    showBotTyping();
+    send(response); 
 }
 
 function handleLocationAccessError(error) {
@@ -864,8 +864,7 @@ function handleLocationAccessError(error) {
     }
 
     response = '/inform{"user_location":"deny"}';
-    send(response);
-    showBotTyping();
+    send(response); 
     $(".usrInput").val("");
     $("#userInput").prop('disabled', false);
 
