@@ -1,4 +1,27 @@
-//initialization
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+function setCookie(cname,cvalue,exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*60*1000));
+  var expires = "expires=" + d.toGMTString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+ 
+		 
+		//initialization
 function uuidv4() {
     //var uuidv4 = 
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
@@ -25,12 +48,17 @@ function getCookie(name) {
     // Return null if not found
     return null;
 }
-
+var user=getCookie("drxChatbot");
+if(user == undefined || user == null){
 user_id = uuidv4() + "_" + Date.now();
+}
 //user_id = getCookie("jsessionid"); 
 //user_id = "iHsMsLY5P_g1E1Dp3R4BGfN-A9JVkSWoUGJtvctC.ubuntu";
 
-var flag = 0;
+var flag = 0; 
+function updateChatSessionData(){ 
+	localStorage.setItem("chatbotData",  $('.chats').html()); 
+}
 $(document).ready(function() {
 
     initChatbot("/user_login");
@@ -407,6 +435,7 @@ function initChatbot(message) {
 			root.style.setProperty('--user-secondary-color', "#c1eedf");
 			root.style.setProperty('--verndor-logo', "url(../images/chatbot_logo.png)");
 			root.style.setProperty('--bubble-icon', "url(../images/chatbot_bubble_icon.png)");
+			 
         },
         error: function(xhr, textStatus, errorThrown) {
 
@@ -416,6 +445,15 @@ function initChatbot(message) {
             console.log("Error from bot end: ", textStatus);
         }
     });
+	
+	
+	if (user == "drxchatbot") {  
+			$('.drx_chatbot_widget').addClass('active');
+			$('.chat_window').addClass('active');
+		   $(".chatbot_icon").fadeOut();  
+			$('.drx_chatbot_widget .chats').html(localStorage.getItem("chatbotData"))  
+			$('.chat_bubble').css('opacity', '1').fadeIn();
+	  }
 }
 /* Loads the chatbot as per Vendor - End */
 
@@ -576,10 +614,8 @@ function setBotResponse(response) {
 
         }
         scrollToBottomOfResults();
-        $('#userInput').focus();
-
-
-
+        $('#userInput').focus(); 
+		updateChatSessionData(); 
     }
 
 
@@ -589,8 +625,7 @@ $("#profile_div").click(function() {
     $(".profile_div").toggle();
     $(".widget").toggle();
 });
-
-
+ 
 //====================================== Render Pdf attachment =======================================
 function renderPdfAttachment(data) {
     pdf_url = data.custom.url;
@@ -637,8 +672,7 @@ function renderDropDwon(data) {
 }
 
 //====================================== Suggestions ===========================================
-
-
+ 
 
 // on click of suggestions, get the value and send to rasa
 $(document).on("click", ".chatbot_btns", function() {
@@ -791,7 +825,7 @@ $(document).on("click", ".quickReplies .chip", function() {
     $(".quickReplies").remove();
 
 });
-
+ 
 //====================================== Get User Location ==================================================
 function getLocation() {
     if (navigator.geolocation) {
@@ -932,8 +966,7 @@ function createChart(title, labels, backgroundColor, chartsData, chartType, disp
     });
 
     scrollToBottomOfResults();
-}
-
+} 
 // on click of expand button, get the chart data from gloabl variable & render it to modal
 $(document).on("click", "#expand", function() {
 
@@ -1005,6 +1038,7 @@ $(".send_us ").bind("click", function() {
     $('.chat_window').addClass('active');
     $('.contentarea.chats').empty();
     send("/home");
+	setCookie("drxChatbot", 'drxchatbot', 10); 
 });
 $(".chatbot_back  ").bind("click", function() {
     $('.start_window').addClass('active');
@@ -1016,7 +1050,7 @@ $("  .faq_window .chatbot_back ").bind("click", function() {
     $('.faq_window').removeClass('active');
 });
 
-
+console(getCookie("drxChatbot"));
 /*  VARIABLE DECLARATION */
 /*
 let root = document.documentElement;
@@ -1028,3 +1062,4 @@ root.style.setProperty('--user-secondary-color', "#c1eedf");
 root.style.setProperty('--verndor-logo', "url(../images/chatbot_logo.png)");
 root.style.setProperty('--bubble-icon', "url(../images/chatbot_bubble_icon.png)");
 */
+	
